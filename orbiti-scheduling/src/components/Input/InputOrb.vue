@@ -85,6 +85,6 @@ const inputClasses = computed(() => [
   "w-full px-4 py-2 border border-gray-100 rounded-md h-12",
   "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
   "placeholder-gray-400 transition duration-150 ease-in-out",
-  internalError.value || props.error ? "border-danger" : "",
+  internalError.value || props.error ? "border-red-400" : "",
 ]);
 </script>
