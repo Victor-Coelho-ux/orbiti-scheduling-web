@@ -33,7 +33,7 @@ const submitLogin = () => {
         src="../../../assets/img/logo-01.png"
         alt="Logo Orbiti"
       />
-      <p class="text-gray-100 text-sm">
+      <p class="text-gray-100 text-sm w-2/3">
         O serviço que você precisa na palma da sua mão.
       </p>
     </template>
@@ -56,6 +56,11 @@ const submitLogin = () => {
           field-name="password"
         />
 
+        <div class="flex">
+          <a href="#" class="text-primary-500 hover:underline text-sm">
+            Esqueci minha senha
+          </a>
+        </div>
         <div class="flex space-x-4 pt-4">
           <ButtonOrb variant="secondary" class="w-full">Cancelar</ButtonOrb>
           <ButtonOrb type="submit" class="w-full">Entrar</ButtonOrb>

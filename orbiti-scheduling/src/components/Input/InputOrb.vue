@@ -1,6 +1,9 @@
 <template>
   <div class="relative">
-    <label v-if="label" class="block text-sm font-medium text-gray-700 mb-2">
+    <label
+      v-if="label"
+      class="block text-sm font-medium text-gray-700 mb-2 text-left"
+    >
       {{ label }}
     </label>
     <input
@@ -73,7 +76,6 @@ const onInput = (event) => {
   validate(value);
 };
 
-// Valida também quando o valor vem de fora
 watch(
   () => props.modelValue,
   (newVal) => {
