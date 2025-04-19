@@ -7,22 +7,20 @@
       :type="type"
       :placeholder="placeholder"
       :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
-      :class="[
-        'w-full px-4 py-2 border border-gray-100 rounded-md h-12',
-        'focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent',
-        'placeholder-gray-400 transition duration-150 ease-in-out',
-        error ? 'border-red-500' : '',
-      ]"
+      @input="onInput"
+      :class="[inputClasses]"
     />
-    <p v-if="error" class="mt-1 text-sm text-red-600">
-      {{ error }}
+    <p v-if="internalError" class="mt-1 text-sm text-danger text-left">
+      {{ internalError }}
     </p>
   </div>
 </template>
 
 <script setup>
-defineProps({
+import { computed, ref, watch } from "vue";
+import { z } from "zod";
+
+const props = defineProps({
   type: {
     type: String,
     default: "text",
@@ -43,7 +41,50 @@ defineProps({
     type: String,
     default: "",
   },
+  validationSchema: {
+    type: Object,
+    default: null,
+  },
+  fieldName: {
+    type: String,
+    default: "",
+  },
 });
 
-defineEmits(["update:modelValue"]);
+const emit = defineEmits(["update:modelValue"]);
+const internalError = ref("");
+
+const validate = (value) => {
+  if (!props.validationSchema || !props.fieldName) return;
+
+  try {
+    props.validationSchema.shape[props.fieldName].parse(value);
+    internalError.value = "";
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      internalError.value = err.issues[0]?.message || "Inválido";
+    }
+  }
+};
+
+const onInput = (event) => {
+  const value = event.target.value;
+  emit("update:modelValue", value);
+  validate(value);
+};
+
+// Valida também quando o valor vem de fora
+watch(
+  () => props.modelValue,
+  (newVal) => {
+    validate(newVal);
+  }
+);
+
+const inputClasses = computed(() => [
+  "w-full px-4 py-2 border border-gray-100 rounded-md h-12",
+  "focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent",
+  "placeholder-gray-400 transition duration-150 ease-in-out",
+  internalError.value || props.error ? "border-danger" : "",
+]);
 </script>

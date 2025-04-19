@@ -10,7 +10,7 @@ export const colors = {
   },
 
   // Cores de erro/sucesso
-  danger: "#ef4444",
+  danger: "#FF742E",
   success: "#10b981",
   warning: "#f59e0b",
 

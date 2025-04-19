@@ -1,41 +1,73 @@
 <script setup>
 import { ref } from "vue";
+import LoginView from "../view/loginView.vue";
 import ButtonOrb from "../../../components/Button/ButtonOrb.vue";
 import InputOrb from "../../../components/Input/InputOrb.vue";
+import { loginSchema } from "../../../validations/auth/loginValidation";
 
 const email = ref("");
 const password = ref("");
 
 const submitLogin = () => {
-  console.log("Email:", email.value);
-  console.log("Senha:", password.value);
+  const result = loginSchema.safeParse({
+    email: email.value,
+    password: password.value,
+  });
+
+  if (result.success) {
+    console.log("Email:", email.value);
+    console.log("Senha:", password.value);
+
+    email.value = "";
+    password.value = "";
+  } else {
+  }
 };
 </script>
 
 <template>
-  <div
-    class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
-  >
-    <div class="max-w-md w-full space-y-10 p-6">
-      <div class="text-center gap-4 flex flex-col items-center">
-        <img
-          class="mx-auto h-10 w-auto"
-          src="../../../assets/img/logo-01.png"
-          alt="Logo Orbiti"
-        />
-        <p class="text-gray-100 text-sm">
-          O serviço que você precisa na palma da sua mão.
-        </p>
-      </div>
+  <LoginView>
+    <template #header>
+      <img
+        class="mx-auto h-10 w-auto"
+        src="../../../assets/img/logo-01.png"
+        alt="Logo Orbiti"
+      />
+      <p class="text-gray-100 text-sm">
+        O serviço que você precisa na palma da sua mão.
+      </p>
+    </template>
+
+    <template #main>
       <form class="mt-8 space-y-2" @submit.prevent="submitLogin">
-        <InputOrb v-model="email" placeholder="Email" type="email" />
-        <InputOrb v-model="password" placeholder="Senha" type="password" />
+        <InputOrb
+          v-model="email"
+          placeholder="Email"
+          type="email"
+          :validation-schema="loginSchema"
+          field-name="email"
+        />
+
+        <InputOrb
+          v-model="password"
+          placeholder="Senha"
+          type="password"
+          :validation-schema="loginSchema"
+          field-name="password"
+        />
 
         <div class="flex space-x-4 pt-4">
-          <ButtonOrb variant="secondary" class="w-full"> Cancelar </ButtonOrb>
-          <ButtonOrb type="submit" class="w-full"> Entrar </ButtonOrb>
+          <ButtonOrb variant="secondary" class="w-full">Cancelar</ButtonOrb>
+          <ButtonOrb type="submit" class="w-full">Entrar</ButtonOrb>
         </div>
       </form>
-    </div>
-  </div>
+    </template>
+
+    <template #footer>
+      <p class="text-gray-100 text-sm">
+        Não tem uma conta?
+        <a href="#" class="text-primary-500 hover:underline"> Cadastre-se </a>
+      </p>
+    </template>
+  </LoginView>
 </template>
